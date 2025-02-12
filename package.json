@@ -1,0 +1,80 @@
+{
+  "name": "hidro_flow",
+  "version": "1.0.0",
+  "main": "./server/server.js",
+  "author": "Victor Eustáquio",
+  "license": "ISC",
+  "description": "Aplicação Web para Controle e Monitoramento de Dispositivo Microcontrolado - ESP32",
+  "keywords": [
+    "ESP32",
+    "Real-time",
+    "Hidroflow"
+  ],
+  "engines": {
+    "node": "20.11.1"
+  },
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "prestart": "npx prisma generate && yarn && yarn global add cross-env && yarn global add nodemon",
+    "db:migrate": "prisma generate && prisma migrate deploy",
+    "generate": "prisma generate",
+    "migration": "cross-env NODE_ENV=development npx knex migrate:latest --env development --knexfile ./src/config/db/knex/knexfile.js",
+    "start": "NODE_ENV=production node src/server",
+    "aws": "cross-env NODE_ENV=aws node src/server",
+    "prd": "cross-env NODE_ENV=production node src/server",
+    "dev": "cross-env NODE_ENV=development nodemon --trace-warnings src/server --watch",
+    "lint": "eslint **/*.js --ignore-pattern node_modules/",
+    "lint:fix": "eslint . --fix",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:prd": "docker-compose -p hidromonitor-prd -f docker-compose.prod.yml up --build -d",
+    "docker:dev": "docker-compose -p hidromonitor-dev -f docker-compose.dev.yml up",
+    "prisma:init": "cross-env NODE_ENV=development npx prisma migrate dev --name init-migration init"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "canvas": "^2.11.2",
+    "connect-redis": "^6.0.0",
+    "cookie-parser": "^1.4.5",
+    "debug": "^4.3.4",
+    "dotenv": "^10.0.0",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-import-resolver-alias": "1.1.2",
+    "eslint-plugin-import": "2.20.1",
+    "express": "^4.17.1",
+    "express-rate-limit": "^6.6.0",
+    "express-session": "^1.17.0",
+    "express-slow-down": "^1.5.0",
+    "hbs": "^4.1.2",
+    "helmet": "^3.23.3",
+    "http-errors": "^2.0.0",
+    "http-status": "^1.5.3",
+    "joi": "^17.6.2",
+    "joi-translation-pt-br": "^0.0.6",
+    "jquery": "^3.5.0",
+    "module-alias": "^2.2.2",
+    "moment": "^2.29.4",
+    "morgan": "^1.10.0",
+    "pg": "^8.8.0",
+    "prisma": "5.15.1",
+    "redis": "^3.1.2",
+    "req-flash": "0.0.3",
+    "rimraf": "^6.0.1",
+    "socket.io": "^2.3.0",
+    "socket.io-express-session": "0.1.3",
+    "sucrase": "^3.12.1",
+    "winston": "^3.8.2",
+    "yarn": "^1.22.22"
+  },
+  "devDependencies": {
+    "@prisma/client": "5.15.1",
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.4"
+  },
+  "prisma": {
+    "schema": "src/config/db/prisma/schema.prisma"
+  }
+}

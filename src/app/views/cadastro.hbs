@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hidro Monitor</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+        name='viewport' />
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/css/mdb.min.css" rel="stylesheet">
+    <!--Bootsrap 4 CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <!--Custom styles-->
+    <link rel="stylesheet" type="text/css" href="./stylesheets/stylecadastro.css">
+    <link rel="stylesheet" type="text/css" href="./plugins/sweetalert2/sweetalert2.min.css">
+
+
+    <style>
+        @chartset "UTF-8";
+        @import url('https://fonts.googleapis.com/css?family=B612:700&display=swap');
+
+
+        @font-face {
+            font-family: 'FonteLogo';
+            src: url("../fonts//Mitr/Mitr-Bold.ttf");
+        }
+
+        .fill {
+            /*BACKGROUND - Image GIF*/
+            background-image: url('../gifs/blue.gif');
+            background-size: contain;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'B612', sans-serif;
+            font-size: 48pt;
+            font-weight: 1000;
+            text-align: center;
+        }
+
+        .jumbo {
+            margin-top: 10% !important;
+            margin-bottom: 0% !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="fill jumbo">Hidro Monitor</h2>
+        <div class="d-flex justify-content-center h-60">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Cadastrar</h3>
+                </div>
+                <div class="card-body">
+                    <form id="form-cadastro" class="form-horizontal" role="form" method="post" action="/cadastro/efetuar-cadastro">
+                        <div class="input-group form-group">
+                            <div id="div-ico-nome" class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input id="input=nome" type="text" class="form-control" name="nome" minlength="4"
+                                placeholder="Nome" autocomplete="none"
+                                required>
+                        </div>
+                        <div class="input-group form-group">
+                            <div id="div-ico-sobrenome" class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <input id="input-sobrenome" type="text" class="form-control" name="sobrenome" minlength="4"
+                                placeholder="Sobrenome" required>
+                        </div>
+                        <div class="input-group form-group">
+                            <div id="div-ico-email" class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <input id="input-email" type="email" class="form-control" name="email"
+                                placeholder="Email" autocomplete="none"
+                                required>
+                        </div>
+                        <div class="input-group form-group">
+                            <div id="div-ico-senha" class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <input id="input-senha"  class="form-control" name="senha" title="Senha precisa conter pelo menos 12 caracteres, 1 letra Maiúscula 1 minúscula e um número"
+                                placeholder="Senha" autocomplete="new-password" type="password" minlength="8" passwordrules="required: upper; required: lower; required: digit;
+                 minlength: 8; allowed: [-().&@?'#,/&quot;+]; max-consecutive: 2" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                        </div>
+                        <div class="input-group form-group">
+                            <div id="div-ico-nomeDispositivo" class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-microchip"></i></span>
+                            </div>
+                            <input id="input-nomeDispositivo" type="text" class="form-control" name="nomeDispositivo" minlength="4"
+                                placeholder="Nome do Dispositivo" autocomplete="none"required>
+                        </div>
+                         <div class="input-group form-group">
+                            <div id="div-ico-macDispositivo" class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-microchip"></i></span>
+                            </div>
+                            <input id="input-macDispositivo" type="text" class="form-control" name="macDispositivo"
+                                placeholder="MAC do Dispositivo" autocomplete="none" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                   <div class="form-group">
+                        <input id="btn-login" type="submit" form="form-cadastro" value="Login" class="btn float-right login_btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{> footer_login}}
+
+</body>
+<script src="./javascript/jquery.min.js"></script>
+<script src="./plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="./plugins/imask/imask.min.js"></script>
+<script>
+
+var macMask = new IMask(document.getElementById('input-macDispositivo'), {
+  mask: '**:**:**:**:**:**',
+  definitions: {
+    '*': /[0-9A-Fa-f]/
+  }
+});
+
+    $('#form-cadastro').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: encodeURI($(this).attr("action")),
+            type: $(this).attr("method"),
+            data: $(this).serialize(),
+        }).done(function (response) {
+            var { status, message, redirect, error } = response;
+            console.log(status, response);
+            var gif = '';
+
+            status ? gif = 'success' : gif = 'info';
+            var tituloDoAlerta= 'Oops...';
+            var tempoDeAlerta = 2000;
+            var mostrarBotaodeConfimacaoDoAlerta = true;
+            if (redirect) {
+                tituloDoAlerta='Sucesso! Redirecionando para Login...'
+                mostrarBotaodeConfimacaoDoAlerta=false;
+                tempoDeAlerta = 2000;
+                setTimeout(function () {
+                    window.location.href = '/';
+                }, tempoDeAlerta);
+            }
+            Swal.fire({
+                heightAuto: false,
+                icon: gif,
+                title: tituloDoAlerta,
+                text: message,
+                showConfirmButton: mostrarBotaodeConfimacaoDoAlerta,
+                confirmButtonText: 'Fechar',
+                confirmButtonColor: '#00beff80', //#00beff80 <-> #33CCFF
+                timer: tempoDeAlerta,
+                customClass: {
+                    confirmButton: 'login_btn',
+                    cancelButton: 'login_btn'
+                },
+            });
+        })
+    })
+</script>
+</html>

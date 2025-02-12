@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+
+ dev-node-app:
+   build: .
+  #  image: dev-node-app
+   depends_on:
+     - dev-postgres-db
+     - dev-redis-cache
+   restart: always
+   ports:
+     - ${PORT:-3000}:3000
+   volumes:
+   - .:/usr/src/node-app
+   networks:
+     - node-network
+   container_name: dev-node-app
+   command: yarn dev
+   environment:
+     NODE_ENV: development
+     - PORT=${PORT}
+     - DATABASE_URL=${DATABASE_URL}
+     - REDIS_HOST=dev-redis-cache
+     - REDIS_PORT=6379
+     - REDIS_DB=1
+     - REDIS_PASSWORD=${REDIS_PASSWORD}
+     - COOKIE_KEY=${COOKIE_KEY}
+
+ dev-postgres-db:
+   image: postgres:14.1-alpine
+   restart: always
+   environment:
+     - POSTGRES_USER=${POSTGRES_USER}
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - POSTGRES_DB=${POSTGRES_DB}
+   ports:
+     - '5444:5444'
+   expose:
+     - '5444'
+   command: -p 5444
+   volumes:
+     - ./postgresdatadev:/data/db/pg/dev:rw
+   networks:
+      - node-network
+
+ dev-redis-cache:
+   image: redis:6.2-alpine
+   restart: always
+   ports:
+     - '6333:6333'
+   expose:
+     - '6333'
+   command: redis-server --port 6333 --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+   volumes:
+     - ./redisdatadev:/data/db/redis/dev
+   networks:
+     - node-network
+
+volumes:
+ postgresdatadev:
+ redisdatadev:
+
+networks:
+ node-network:
+   driver: bridge
+

@@ -1,0 +1,9 @@
+node_modules
+*.vscode*
+*.env*
+*temp*
+*.yml*
+!*dev.yml*
+*.log*
+_env*
+

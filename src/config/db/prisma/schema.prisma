@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native","linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model Privilegio {
+  id        Int      @id @default(autoincrement())
+  tipo      String   @default("Usuario")
+  usuario   Usuario? @relation(fields: [idUsuario], references: [id])
+  idUsuario Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tipo, idUsuario])
+}
+
+model Usuario {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  sobrenome    String?
+  email        String        @unique
+  senha        String
+  privilegios  Privilegio[]
+  dispositivos Dispositivo[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Dispositivo {
+  id               Int               @id @default(autoincrement())
+  nome             String?
+  local            String?
+  macId            String?           @unique
+  Hidrometro       Hidrometro[]
+  ValvulaSolenoide ValvulaSolenoide?
+  SensorPresenca   SensorPresenca?
+  usuario          Usuario?          @relation(fields: [idUsuario], references: [id])
+  idUsuario        Int?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model Hidrometro {
+  id            Int          @id @default(autoincrement())
+  fluxo         String
+  deletado      Boolean      @default(false)
+  dispositivo   Dispositivo? @relation(fields: [dispositivoId], references: [macId])
+  dispositivoId String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model ValvulaSolenoide {
+  id            Int         @id @default(autoincrement())
+  estado        Boolean     @default(false)
+  dispositivo   Dispositivo @relation(fields: [dispositivoId], references: [macId])
+  dispositivoId String      @unique
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model SensorPresenca {
+  id            Int         @id @default(autoincrement())
+  estado        Boolean     @default(false)
+  dispositivo   Dispositivo @relation(fields: [dispositivoId], references: [macId])
+  dispositivoId String      @unique
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
