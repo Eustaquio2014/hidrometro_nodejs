@@ -4,6 +4,8 @@ services:
 
  dev-node-app:
    build: .
+   env_file:
+     - .env.production
   #  image: dev-node-app
    depends_on:
      - dev-postgres-db
@@ -29,6 +31,8 @@ services:
 
  dev-postgres-db:
    image: postgres:14.1-alpine
+   env_file:
+     - .env.production
    restart: always
    environment:
      - POSTGRES_USER=${POSTGRES_USER}
@@ -46,6 +50,8 @@ services:
 
  dev-redis-cache:
    image: redis:6.2-alpine
+   env_file:
+     - .env.production
    restart: always
    ports:
      - '6333:6333'
