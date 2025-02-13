@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
-const moment = require('moment')
+const moment = require('moment-timezone')
 const { Prisma } = require('@src/config/db/prisma')
 const { DadosController } = require('./dados.controller')
 

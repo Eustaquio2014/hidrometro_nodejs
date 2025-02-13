@@ -1,5 +1,5 @@
 const { HidrometroService } = require('@src/app/services/hidrometro.service')
-const moment = require('moment')
+const moment = require('moment-timezone')
 
 module.exports.DadosController = {
     async renderPageDados(req, res) {
