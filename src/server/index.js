@@ -12,7 +12,7 @@ const serverSocket = require('./serverSocket')
 const attachSocket = require('./utils/attachSocket.utils')
 const { PrismaClient } = require('@prisma/client')
 const { Prisma } = require('@src/config/db/prisma')
-const moment = require('moment')
+const moment = require('moment-timezone');
 
 moment.tz.setDefault("America/Sao_Paulo");
 
