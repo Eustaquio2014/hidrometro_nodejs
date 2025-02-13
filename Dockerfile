@@ -6,7 +6,7 @@ WORKDIR /node/node-app
 
 COPY ["package.json", "yarn.lock", "./"]
 
-COPY .env.production /app/.env.production
+COPY .env.production /node/node-app/.env.production
 
 USER node
 
