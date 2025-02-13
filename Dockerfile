@@ -6,6 +6,8 @@ WORKDIR /node/node-app
 
 COPY ["package.json", "yarn.lock", "./"]
 
+COPY .env.production /app/.env.production
+
 USER node
 
 # Limpar o cache do yarn (opcional, só se necessário)
