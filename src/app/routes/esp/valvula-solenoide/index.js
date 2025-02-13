@@ -1,12 +1,12 @@
-const catchAsync = require('@src/app/middlewares/catchAsync');
-const express = require('express');
+const catchAsync = require('@src/app/middlewares/catchAsync')
+const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
 
-const releController = require('./valvula-solenoide.controller');
+const releController = require('./valvula-solenoide.controller')
 
-router.get('/', catchAsync(releController.getReleData));
+router.get('/', catchAsync(releController.getReleData))
 
-router.put('/', catchAsync(releController.updateReleStatus));
+router.put('/', catchAsync(releController.updateReleStatus))
 
-module.exports = router;
+module.exports = router

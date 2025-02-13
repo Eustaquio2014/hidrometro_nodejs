@@ -239,7 +239,7 @@
                         <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="card card-tasks">
                                 <div class="card-header ">
-                                    <h4 class="card-title">Consumo</h4>
+                                    <h4 class="card-title">Consumo diário</h4>
                                     <p class="card-category"></p>
                                     <hr>
                                 </div>
@@ -251,6 +251,21 @@
                                             </div>
                                         </div>
                                     </center>
+                                    <hr>
+                                    <div class="row justify-content-center">
+                                        <h4
+                                            style="color: white; margin-top: 0px; margin-bottom: 6px; font-size: 14px; color: gray">
+                                            Dispositivo
+                                        </h4>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <select id="select-device" name="dispositivo" class="classic"
+                                            onchange="loadConsumoDiario()">
+                                            {{#each dispositivos as | dispositivo |}}
+                                            <option value="{{dispositivo.macId}}">{{dispositivo.nome}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="card-footer">
                                 </div>
@@ -297,23 +312,30 @@
     <!--<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script> -->
     <!-- <script src="//cdn.jsdelivr.net/socket.io-client/1.3.2/socket.io.js"> </script> -->
     <!--<script src="https://code.jquery.com/jquery-1.11.1.js"></script> -->
-    {{!-- <script src="../plugins/socket.io/4.5.0/socket.io.min.js"></script> --}}
+    {{!--
+    <script src="../plugins/socket.io/4.5.0/socket.io.min.js"></script> --}}
     <script src="../plugins/socket.io/2.3.0/socket.io.js"></script>
 
+    <script>
+        function refreshChartData(chart, content) {
+            chart.refresh(content || 0)
+        }
+    </script>
 
     <script>
 
-      const userDevices = {{{json dispositivos}}}
+        const userDevices = {{{ json dispositivos }}}
 
-      function debounce(func, timeout = 2000){
-          let timer;
-          return (...args) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => { func.apply(this, args); }, timeout);
-          };
+        function debounce(func, timeout = 2000) {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => { func.apply(this, args); }, timeout);
+            };
         }
-        function gaugeNoData(){
-            fluxoGauge.refresh(0);
+
+        function gaugeNoData() {
+            refreshChartData(fluxoGauge, 0)
             DeviceData.fluxo = 0
         }
         const refreshIfNoData = debounce(() => gaugeNoData());
@@ -326,53 +348,55 @@
         var DeviceData = { fluxo: "0" };
 
         const setChartOffline = () => {
-            fluxoGauge.refresh("Offline");
+            refreshChartData(fluxoGauge, "Offline");
         }
         const setChartOnline = () => {
-            fluxoGauge.refresh(0);
+            refreshChartData(fluxoGauge, 0)
         }
 
         //CONEXÃO SOCKET
         const socket = io.connect({
             autoConnect: true,
             reconnection: false,
-          });
+        });
 
         const tryReconnect = () => {
-          console.clear()
-          console.log("socket offline")
-          setTimeout(() => {
-            socket.io.open((err) => {
-              if (err) {
-                tryReconnect();
-              }
-              if(!err){
-                console.clear()
-                console.log("socket connected")
-                setChartOnline()
-              }
-            });
-          }, 5000);
+            console.clear()
+            console.log("socket offline")
+            setTimeout(() => {
+                socket.io.open((err) => {
+                    if (err) {
+                        tryReconnect();
+                    }
+                    if (!err) {
+                        console.clear()
+                        console.log("socket connected")
+                        setChartOnline()
+                    }
+                });
+            }, 5000);
         }
 
-        socket.io.on("close", ()=>{
-          tryReconnect();
-          setChartOffline();
+        socket.io.on("close", () => {
+            tryReconnect();
+            setChartOffline();
         });
-        socket.on('disconnect', ()=> console.log("socket disconnect"));
+        socket.on('disconnect', () => console.log("socket disconnect"));
 
 
-        userDevices.forEach(device=>{
-          const { macId } = device
+        userDevices.forEach(device => {
+            const { macId } = device
 
-          const formattedMac = macId.replace(/-/g, '').replace(/:/g, '');
+            const formattedMac = macId.replace(/-/g, '').replace(/:/g, '');
 
-          socket.on(`${formattedMac}`, function (data) {
-            DeviceData = data;
-            fluxoGauge.refresh(DeviceData?.fluxo || 0);
+            socket.on(`${formattedMac}`, function (data) {
+                DeviceData = data;
 
-            refreshIfNoData();
-          });
+                const newData = DeviceData?.fluxo || 0
+                refreshChartData(fluxoGauge, newData)
+
+                refreshIfNoData();
+            });
         })
 
 
@@ -401,11 +425,11 @@
             shadowVerticalOffset: 12
         });
 
-        setTimeout(()=> fluxoGauge.refresh(0), 500)
+        setTimeout(() => refreshChartData(fluxoGauge, 0), 500)
 
         var litrosConsumidos = 0;
 
-        var consumoDiario_Chart = new JustGage({
+        var consumoGauge = new JustGage({
             id: "consumo_id",
             value: litrosConsumidos,
             min: 0,
@@ -506,12 +530,12 @@
                 enabled: false
             },
             stroke: {
-              show: true,
-              curve: 'smooth',
-              lineCap: 'round',
-              //colors: undefined,
-              width: 3,
-              dashArray: 0,
+                show: true,
+                curve: 'smooth',
+                lineCap: 'round',
+                //colors: undefined,
+                width: 3,
+                dashArray: 0,
             },
             title: {
                 text: '',
@@ -545,6 +569,45 @@
                 data: data
             }]);
         }, 1000)
+
+    </script>
+
+    <script>
+
+
+
+
+        function loadConsumoDiario() {
+            const selectedMacId = $('#select-device').val()
+            const dispositivoData = localDispositivosData?.find(dispositivo => dispositivo.macId === selectedMacId)
+            const date = new Date().toISOString().split('T')[0];
+
+            console.log("loadConsumoDiario ", selectedMacId, date)
+
+            const payload = {
+                date,
+                endDate: data?.slice(13, 24) || null,
+                groupBy: selectedGroup
+            }
+
+            $.ajax({
+                url: "/dados/consumo-diario",
+                type: "post",
+                data: {
+                    deviceId: dispositivoData.macId || firstDeviceId,
+                    ...payload
+                }
+            }).done(function (response) {
+                const { consumo_diario_total } = response
+                refreshChartData(consumoGauge, consumo_diario_total)
+            });
+        }
+
+        //Atualiza o consumo diário a cada 1 minuto
+        setInterval(() => {
+            loadConsumoDiario()
+        }, 60000)
+
 
     </script>
 

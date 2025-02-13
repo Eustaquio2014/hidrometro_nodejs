@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+
+ prd-node-app:
+   build: .
+   env_file:
+     - .env.production
+   image: prd-node-app
+   depends_on:
+     - prd-postgres-db
+     - prd-redis-cache
+   restart: always
+   ports:
+     - 80:7000
+   volumes:
+     - .:/usr/src/node-app
+     - /usr/src/node-app/node_modules
+   networks:
+     - node-network
+   container_name: prd-node-app
+   command: ["sh", "-c", "yarn db:migrate && yarn prd"]
+   environment:
+     - NODE_ENV=production
+     - PORT=${PORT}
+     - DATABASE_URL=${DATABASE_URL}
+     - REDIS_HOST=prd-redis-cache
+     - REDIS_PORT=6379
+     - REDIS_DB=1
+     - REDIS_PASSWORD=${REDIS_PASSWORD}
+     - COOKIE_KEY=${COOKIE_KEY}
+   healthcheck:
+    test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
+    interval: 30s
+    retries: 3
+    start_period: 30s
+    timeout: 5s
+ prd-postgres-db:
+   image: postgres:14.1-alpine
+   env_file:
+     - .env.production
+   restart: always
+   environment:
+     - POSTGRES_USER=${POSTGRES_USER}
+     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+     - POSTGRES_DB=${POSTGRES_DB}
+   ports:
+     - '5432:5432'
+   expose:
+     - '5432'
+   command: -p 5432
+   volumes:
+     - ./postgresdata:/data/db/pg:rw
+   networks:
+      - node-network
+
+ prd-redis-cache:
+   image: redis:6.2-alpine
+   env_file:
+     - .env.production
+   restart: always
+   ports:
+     - '6379:6379'
+   expose:
+     - '6379'
+   command: redis-server --port 6379 --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+   volumes:
+     - ./redisdata:/data/db/redis:rw
+   networks:
+     - node-network
+
+volumes:
+ postgresdata:
+ redisdata:
+
+networks:
+ node-network:
+   driver: bridge
+

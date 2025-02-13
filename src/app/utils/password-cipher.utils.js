@@ -1,31 +1,31 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs')
 
-const saltRounds = 10;
+const saltRounds = 10
 
 // new ApiError(err.message);
 module.exports.encryptPassword = async (password) => {
-  const hashedPassword = await new Promise((resolve, reject) => {
-    bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(hash);
-    });
-  });
+    const hashedPassword = await new Promise((resolve, reject) => {
+        bcrypt.hash(password, saltRounds, (err, hash) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(hash)
+        })
+    })
 
-  return hashedPassword;
-};
+    return hashedPassword
+}
 
 module.exports.isPasswordDecrypter = async (password, hash) => {
-  const hashedPassword = await new Promise((resolve, reject) => {
-    bcrypt.compare(password, hash, (err, result) => {
-      if (err) {
-        reject(err);
-      }
+    const hashedPassword = await new Promise((resolve, reject) => {
+        bcrypt.compare(password, hash, (err, result) => {
+            if (err) {
+                reject(err)
+            }
 
-      resolve(result);
-    });
-  });
+            resolve(result)
+        })
+    })
 
-  return hashedPassword;
-};
+    return hashedPassword
+}

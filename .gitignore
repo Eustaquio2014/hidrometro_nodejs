@@ -1,9 +1,14 @@
+#Ignore
 node_modules
 *.vscode*
 *.env*
 *temp*
 *.yml*
-!*dev.yml*
 *.log*
 _env*
+
+#Includes
+!docker-compose.dev.yml*
+!docker-compose.prd.yml*
+!.env.production.example
 

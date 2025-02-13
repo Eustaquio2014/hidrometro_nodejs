@@ -220,7 +220,7 @@
                   <div class="row" style="background-color:#3c98d5fa;">
                     <div class="col-sm-12 select-align-center">
                       <h4 style="color: white; margin-top: 0px; margin-bottom: 6px;">Dispositivo</h4>
-                      <select id="select-device" name="dispositivo" class="classic" onchange="loadConsumoDiario()">
+                      <select id="select-device" name="dispositivo" class="classic" onchange="loadConsumoHistorico()">
                         {{#each dispositivos as | dispositivo |}}
                         <option value="{{dispositivo.macId}}">{{dispositivo.nome}}</option>
                         {{/each}}
@@ -228,7 +228,7 @@
                     </div>
                                         <div class="col-sm-12 select-align-center">
                       <h4 style="color: white; margin-top: 0px; margin-bottom: 6px;">Agrupar</h4>
-                      <select id="select-group" name="agrupamento" class="classic" onchange="loadConsumoDiario()">
+                      <select id="select-group" name="agrupamento" class="classic" onchange="loadConsumoHistorico()">
                         <option value="byMonth">Por Mês</option>
                         <option value="byDay" selected="true">Por Dia</option>
                         <option value="byHour">Por Hora</option>
@@ -336,7 +336,7 @@
               endDate: datesFormatted.pop(),
 
             } --}}*/
-          loadConsumoDiario()
+          loadConsumoHistorico()
         }
       },
       onSelect: function (dateText) {
@@ -437,16 +437,14 @@
 
 
     function chartConsumoHistorico(chart, content) {
-
       //removeData(chart)
-
       var { dataUltimoConsumo = '' } = content || {};
       if (dataUltimoConsumo) {
         document.getElementById("chartpreview").innerHTML = "Último consumo registrado";
       }
       document.getElementById("chartpreview2").innerHTML = dataUltimoConsumo;
 
-      var consumo_diario = content?.dados?.map(item => Number((item.soma_fluxo_litros_segundo / 60) / 2).toFixed(2));
+      var consumo = content?.dados?.map(item => Number((item.consumo_litros)).toFixed(2));
       var dias = content?.dados?.map(item => item.data);
 
       const dataInicio = dias?.length ? dias[0] : ''
@@ -456,11 +454,10 @@
         $('#date-range').attr('placeholder', `${dataInicio.replace(/-/g, "/")} - ${dataFim.replace(/-/g, "/")}`)
       }
 
-      addData(chart, dias, consumo_diario)
-
+      addData(chart, dias, consumo)
     }
 
-    function loadConsumoDiario() {
+    function loadConsumoHistorico() {
 
       const selectedMacId = $('#select-device').val()
       const selectedGroup = $('#select-group').val()
@@ -497,10 +494,9 @@
       });
     }
 
-
     $(document).ready(function () {
       initCanvas();
-      loadConsumoDiario();
+      loadConsumoHistorico();
     });
   </script>
 </body>

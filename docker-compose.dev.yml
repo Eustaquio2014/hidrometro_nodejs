@@ -18,7 +18,7 @@ services:
    container_name: dev-node-app
    command: yarn dev
    environment:
-     NODE_ENV: development
+     - NODE_ENV=development
      - PORT=${PORT}
      - DATABASE_URL=${DATABASE_URL}
      - REDIS_HOST=dev-redis-cache

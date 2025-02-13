@@ -22,4 +22,3 @@ RUN yarn install --frozen-lockfile
 
 COPY --chown=node:node . .
 
-EXPOSE 3000

@@ -1,43 +1,43 @@
-const { Prisma } = require('@src/config/db/prisma');
+const { Prisma } = require('@src/config/db/prisma')
 
 const upsert = async (macId, status) => {
-  const statusBoolean = (status === 'true');
+    const statusBoolean = (status === 'true')
 
-  if (macId) {
-    const sensorPresencaData = await Prisma.sensorPresenca.upsert({
-      where: {
-        dispositivoId: macId,
-      },
-      update: {
-        estado: statusBoolean,
-      },
-      create: {
-        estado: statusBoolean,
-        dispositivoId: macId,
-      },
-    });
+    if (macId) {
+        const sensorPresencaData = await Prisma.sensorPresenca.upsert({
+            where: {
+                dispositivoId: macId,
+            },
+            update: {
+                estado: statusBoolean,
+            },
+            create: {
+                estado: statusBoolean,
+                dispositivoId: macId,
+            },
+        })
 
-    return sensorPresencaData;
-  }
+        return sensorPresencaData
+    }
 
-  return {};
-};
+    return {}
+}
 
 const insert = async (macId, status) => {
-  const statusBoolean = (status === 'true');
+    const statusBoolean = (status === 'true')
 
-  if (macId) {
-    const sensorPresencaData = await Prisma.sensorPresenca.create({
-      data: {
-        estado: statusBoolean,
-        dispositivoId: macId,
-      },
-    });
+    if (macId) {
+        const sensorPresencaData = await Prisma.sensorPresenca.create({
+            data: {
+                estado: statusBoolean,
+                dispositivoId: macId,
+            },
+        })
 
-    return sensorPresencaData;
-  }
+        return sensorPresencaData
+    }
 
-  return {};
-};
+    return {}
+}
 
-module.exports.storageSensorPresenca = { upsert, insert };
+module.exports.storageSensorPresenca = { upsert, insert }

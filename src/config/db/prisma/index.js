@@ -1,12 +1,12 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('@prisma/client')
 
 const errorFormat = {
-  pretty: 'pretty',
-  minimal: 'minimal',
-};
+    pretty: 'pretty',
+    minimal: 'minimal',
+}
 
 const prismaClientConfig = {
-  errorFormat: errorFormat.minimal,
-};
+    errorFormat: errorFormat.minimal,
+}
 
-module.exports.Prisma = new PrismaClient(prismaClientConfig);
+module.exports.Prisma = new PrismaClient(prismaClientConfig)

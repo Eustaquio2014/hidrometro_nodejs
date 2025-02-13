@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-const socketIoConnection = require('@src/server/serverSocket');
+const socketIoConnection = require('@src/server/serverSocket')
 
 /*
 content: {
@@ -12,49 +12,49 @@ content: {
   */
 
 const mudarEstadoValvulaSolenoide = async (mac, status_solenoide) => {
-  if (!mac || typeof status_solenoide !== 'boolean') {
-    return false;
-  }
-  console.log('mac ', mac);
-  socketIoConnection.emit(mac, {
-    status_solenoide,
-  });
+    if (!mac || typeof status_solenoide !== 'boolean') {
+        return false
+    }
+    console.log('mac ', mac)
+    socketIoConnection.emit(mac, {
+        status_solenoide,
+    })
 
-  return true;
-};
+    return true
+}
 
 const mudarEstadoSensorPresenca = async (mac, status_sensor_presenca) => {
-  if (!mac) {
-    return false;
-  }
-  if (typeof status_sensor_presenca !== 'boolean'
-  ) {
-    return false;
-  }
+    if (!mac) {
+        return false
+    }
+    if (typeof status_sensor_presenca !== 'boolean'
+    ) {
+        return false
+    }
 
-  socketIoConnection.emit(mac, {
-    status_sensor_presenca,
-  });
+    socketIoConnection.emit(mac, {
+        status_sensor_presenca,
+    })
 
-  return true;
-};
+    return true
+}
 
 
 const mudarEstados = async (mac, status_sensor_presenca, status_solenoide) => {
-  if (!mac) {
-    return false;
-  }
-  if (status_sensor_presenca !== 'boolean' && typeof status_solenoide !== 'boolean'
-  ) {
-    return false;
-  }
+    if (!mac) {
+        return false
+    }
+    if (status_sensor_presenca !== 'boolean' && typeof status_solenoide !== 'boolean'
+    ) {
+        return false
+    }
 
-  socketIoConnection.emit(mac, {
-    status_solenoide,
-    status_sensor_presenca,
-  });
+    socketIoConnection.emit(mac, {
+        status_solenoide,
+        status_sensor_presenca,
+    })
 
-  return true;
-};
+    return true
+}
 
-module.exports = { esp32Emit: { mudarEstadoValvulaSolenoide, mudarEstadoSensorPresenca, mudarEstados } };
+module.exports = { esp32Emit: { mudarEstadoValvulaSolenoide, mudarEstadoSensorPresenca, mudarEstados } }
