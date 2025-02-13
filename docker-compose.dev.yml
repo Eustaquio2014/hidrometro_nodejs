@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-
  dev-node-app:
    build: .
    env_file:
@@ -28,7 +27,6 @@ services:
      - REDIS_DB=1
      - REDIS_PASSWORD=${REDIS_PASSWORD}
      - COOKIE_KEY=${COOKIE_KEY}
-
  dev-postgres-db:
    image: postgres:14.1-alpine
    env_file:
@@ -47,7 +45,6 @@ services:
      - ./postgresdatadev:/data/db/pg/dev:rw
    networks:
       - node-network
-
  dev-redis-cache:
    image: redis:6.2-alpine
    env_file:
