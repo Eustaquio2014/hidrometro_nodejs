@@ -60,7 +60,7 @@ module.exports.HidrometroService = {
                     )
                     SELECT ROUND(SUM(consumo_litros), 2) AS consumo_diario_total
                     FROM consumo_diario
-                    WHERE "data" = ${data}::date;
+                    WHERE DATE("createdAt") = ${data}::date;
                     `.then((rows) => rows[0]?.consumo_diario_total || 0)
         },
 }
