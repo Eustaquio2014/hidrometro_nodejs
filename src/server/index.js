@@ -12,9 +12,6 @@ const serverSocket = require('./serverSocket')
 const attachSocket = require('./utils/attachSocket.utils')
 const { PrismaClient } = require('@prisma/client')
 const { Prisma } = require('@src/config/db/prisma')
-const moment = require('moment-timezone');
-
-moment.tz.setDefault("America/Sao_Paulo");
 
 const server = http.createServer(app)
 console.log(`ENV - ${process.env.NODE_ENV}`);

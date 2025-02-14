@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable indent */
 const { Prisma } = require('@src/config/db/prisma')
-const moment = require('moment-timezone')
+const moment = require('moment')
 
 module.exports.HidrometroService = {
         async ConsumoPorPeriodo(dataInicio, dataFinal, selectedDeviceMac, groupBy) {
