@@ -28,8 +28,8 @@ module.exports.HidrometroService = {
                         DATE_TRUNC('hour', "createdAt"::timestamp) AS hora
                         FROM public."Hidrometro"
                         WHERE "dispositivoId" = ${selectedDeviceMac}
-                        AND "createdAt" >= ${dataInicio}
-                        AND "createdAt" < ${dataFinal}
+                        AND "createdAt" >= ${dataInicio}::timestamp
+                        AND "createdAt" < ${dataFinal}::timestamp
                         GROUP BY hora
                         ORDER BY hora ASC;
                         `.then((rows) => rows.map((row) => ({
