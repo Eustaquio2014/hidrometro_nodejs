@@ -10,7 +10,7 @@ module.exports.HidrometroService = {
                         SELECT ROUND(SUM(fluxo::numeric / 60), 2) AS consumo_litros, 
                         "createdAt"::date AS "data"
                         FROM public."Hidrometro"
-                        WHERE "dispositivoId" = ${selectedDeviceMac} AND "createdAt" BETWEEN ${dataInicio} AND ${dataFinal}
+                        WHERE "dispositivoId" = ${selectedDeviceMac} AND "createdAt" BETWEEN date(${dataInicio}) AND date(${dataFinal})
                         GROUP BY "createdAt"::date
                         ORDER BY "data" ASC;
                         `.then((rows) => rows.map((row) => ({
@@ -26,7 +26,7 @@ module.exports.HidrometroService = {
                     return Prisma.$queryRaw`
                         SELECT ROUND(SUM(fluxo::numeric / 60), 2) AS consumo_litros, 
                         DATE_TRUNC('hour', "createdAt"::timestamp) AS hora
-                        FROM public."Hidrometro" WHERE "dispositivoId" = ${selectedDeviceMac} AND "createdAt" BETWEEN ${dataInicio} AND ${dataFinal}
+                        FROM public."Hidrometro" WHERE "dispositivoId" = ${selectedDeviceMac} AND "createdAt" BETWEEN date(${dataInicio}) AND date(${dataFinal})
                         GROUP BY hora
                         ORDER BY hora ASC;
                         `.then((rows) => rows.map((row) => ({
