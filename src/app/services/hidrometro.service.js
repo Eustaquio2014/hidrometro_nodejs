@@ -57,6 +57,8 @@ module.exports.HidrometroService = {
                         FROM public."Hidrometro"
                         WHERE "dispositivoId" = ${selectedDeviceMac}
                         AND "createdAt"::date = date(${data})
-                    `.then((rows) => rows[0]?.consumo_diario_total || 0)
+                    `.then((rows) => ({
+                        consumo_diario_total: rows[0]?.consumo_diario_total || 0,
+                    }))
         },
 }
