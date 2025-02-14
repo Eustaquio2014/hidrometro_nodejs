@@ -317,6 +317,12 @@
     <script src="../plugins/socket.io/2.3.0/socket.io.js"></script>
 
     <script>
+        var localDispositivosData = {{{ json dispositivos }}}
+        const firstDeviceId = localDispositivosData ? localDispositivosData[0].id : null
+    </script>
+
+    <script>
+
         function refreshChartData(chart, content) {
             chart.refresh(content || 0)
         }
