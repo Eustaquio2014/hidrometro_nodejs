@@ -331,6 +331,7 @@
                     maxValue += 100;
                 }
             }
+            console.log("maxValue ", maxValue)
             chart.refresh(content || 0, maxValue)
         }
     </script>
@@ -587,9 +588,6 @@
 
     <script>
 
-
-
-
         function loadConsumoDiario() {
             const selectedMacId = $('#select-device').val()
             const dispositivoData = localDispositivosData?.find(dispositivo => dispositivo.macId === selectedMacId)
@@ -615,6 +613,7 @@
             });
         }
 
+        loadConsumoDiario()
         //Atualiza o consumo diário a cada 1 minuto
         setInterval(() => {
             loadConsumoDiario()
