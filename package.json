@@ -25,10 +25,12 @@
     "dev": "cross-env NODE_ENV=development nodemon --trace-warnings src/server --watch",
     "lint": "eslint **/*.js --ignore-pattern node_modules/",
     "lint:fix": "npx eslint --fix .",
-    "docker:up": "docker-compose up",
-    "docker:down": "docker-compose down",
-    "docker:prd": "docker-compose -p hidromonitor-prd -f docker-compose.prd.yml up --env-file ./.env.production --build -d",
     "docker:dev": "docker-compose -p hidromonitor-dev -f docker-compose.dev.yml up --env-file ./.env.development --build",
+    "docker:dev:up": "docker-compose -f docker-compose.dev.yml up --env-file ./.env.development",
+    "docker:dev:down": "docker-compose -f docker-compose.dev.yml down --env-file ./.env.development",
+    "docker:prd": "docker-compose -p hidromonitor-prd -f docker-compose.prd.yml up --env-file ./.env.production --build -d",
+    "docker:prd:up": "docker-compose -f docker-compose.prd.yml up --env-file ./.env.production",
+    "docker:prd:down": "docker-compose -f docker-compose.prd.yml down --env-file ./.env.production",
     "prisma:init": "cross-env NODE_ENV=development npx prisma migrate dev --name init-migration init"
   },
   "dependencies": {
