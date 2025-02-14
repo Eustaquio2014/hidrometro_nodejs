@@ -61,8 +61,8 @@ router.post('/consumo', async (req, res) => {
 
     if (startDate && endDate) {
         responseData = await DadosController.ConsumoPorPeriodo(
-            moment(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-            moment(endDate, 'DD/MM/YYYY').add(1, 'days').format('YYYY-MM-DD'),
+            moment(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD').toDate(),
+            moment(endDate, 'DD/MM/YYYY').add(1, 'days').format('YYYY-MM-DD').toDate(),
             selectedDeviceMac,
             groupBy,
         )
@@ -77,8 +77,8 @@ router.post('/consumo', async (req, res) => {
 
     if (!startDate && !endDate) {
         responseData = await DadosController.ConsumoPorPeriodo(
-            moment.utc(createdAt).subtract(7, 'day').format('YYYY-MM-DD'),
-            moment.utc(createdAt).add(1, 'days').format('YYYY-MM-DD'),
+            moment.utc(createdAt).subtract(7, 'day').format('YYYY-MM-DD').toDate(),
+            moment.utc(createdAt).add(1, 'days').format('YYYY-MM-DD').toDate(),
             selectedDeviceMac,
             groupBy,
         )
