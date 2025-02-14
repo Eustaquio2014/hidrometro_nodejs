@@ -1,4 +1,4 @@
-FROM node:20.11.1 AS BUILD
+FROM node:20.11.1 AS build
 
 RUN mkdir -p /node/node-app && chown -R node:node /node/node-app
 
