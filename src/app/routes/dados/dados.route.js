@@ -76,9 +76,10 @@ router.post('/consumo', async (req, res) => {
     }
 
     if (startDate && !endDate) {
+
         responseData = await DadosController.ConsumoPorPeriodo(
-            moment(startDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-            moment(startDate, 'DD/MM/YYYY').add(1, 'days').format('YYYY-MM-DD'),
+            moment(startDate, 'DD/MM/YYYY').startOf('day').toDate(),
+            moment(startDate, 'DD/MM/YYYY').endOf('day').toDate(),
             selectedDeviceMac,
             groupBy,
         )
