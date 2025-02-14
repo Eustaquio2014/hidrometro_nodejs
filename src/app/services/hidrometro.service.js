@@ -53,17 +53,10 @@ module.exports.HidrometroService = {
         },
         async ConsumoDiario(data, selectedDeviceMac) {
                 return Prisma.$queryRaw`
-                        WITH consumo_diario AS (
-                            SELECT
-                                fluxo::numeric * EXTRACT(EPOCH FROM LEAD("createdAt")
-                                OVER (PARTITION BY "dispositivoId" ORDER BY "createdAt") - "createdAt") / 60 AS consumo_litros,
-                                "createdAt"
-                            FROM public."Hidrometro"
-                            WHERE "dispositivoId" = ${selectedDeviceMac}
-                            AND "createdAt"::date = date(${data})
-                        )
-                        SELECT ROUND(SUM(consumo_litros), 2) AS consumo_diario_total
-                        FROM consumo_diario
+                        SELECT ROUND(SUM(fluxo::numeric) / 60, 2) AS consumo_diario_total
+                        FROM public."Hidrometro"
+                        WHERE "dispositivoId" = ${selectedDeviceMac}
+                        AND "createdAt"::date = date(${data})
                     `.then((rows) => rows[0]?.consumo_diario_total || 0)
         },
 }
