@@ -7,7 +7,7 @@ module.exports.HidrometroService = {
         async ConsumoPorPeriodo(dataInicio, dataFinal, selectedDeviceMac, groupBy) {
                 if (groupBy === 'byDay') {
                     return Prisma.$queryRaw`
-                        SELECT ROUND(SUM(fluxo::numeric / 60), 2) AS consumo_litros, 
+                        SELECT ROUND(SUM(fluxo::numeric / 60), 2) AS consumo_litros,
                         "createdAt"::date AS "data"
                         FROM public."Hidrometro"
                         WHERE "dispositivoId" = ${selectedDeviceMac} AND "createdAt" BETWEEN date(${dataInicio}) AND date(${dataFinal})
@@ -24,16 +24,17 @@ module.exports.HidrometroService = {
 
                 if (groupBy === 'byHour') {
                     return Prisma.$queryRaw`
-                        SELECT ROUND(SUM(fluxo::numeric / 60), 2) AS consumo_litros, 
+                        SELECT ROUND(SUM(fluxo::numeric / 60), 2) AS consumo_litros,
                         DATE_TRUNC('hour', "createdAt"::timestamp) AS hora
-                        FROM public."Hidrometro" WHERE "dispositivoId" = ${selectedDeviceMac} AND "createdAt" BETWEEN date(${dataInicio}) AND date(${dataFinal})
+                        FROM public."Hidrometro"
+                        WHERE "dispositivoId" = ${selectedDeviceMac}
+                        AND "createdAt" >= ${dataInicio}
+                        AND "createdAt" < ${dataFinal}
                         GROUP BY hora
                         ORDER BY hora ASC;
                         `.then((rows) => rows.map((row) => ({
                                 ...row,
                                 data: moment(row.hora)
-                                .add(23, 'hour')
-                                .add(59, 'min')
                                 .format('DD/MM HH:mm'),
                         })))
                 }
@@ -47,20 +48,22 @@ module.exports.HidrometroService = {
                     ORDER BY mes ASC;
                     `.then((rows) => rows.map((row) => ({
                             ...row,
-                            data: moment(row.mes).format('MM/YYYY'),
+                            data: moment(row.mes).toDate().toISOString().split('T')[0].slice(0, -3),
                     })))
         },
         async ConsumoDiario(data, selectedDeviceMac) {
                 return Prisma.$queryRaw`
-                    WITH consumo_diario AS (
-                        SELECT fluxo::numeric * EXTRACT(EPOCH FROM LEAD("createdAt") 
-                        OVER (PARTITION BY "dispositivoId" ORDER BY "createdAt") - "createdAt") / 60 AS consumo_litros
-                        FROM public."Hidrometro"
-                        WHERE "dispositivoId" = ${selectedDeviceMac}
-                    )
-                    SELECT ROUND(SUM(consumo_litros), 2) AS consumo_diario_total
-                    FROM consumo_diario
-                    WHERE DATE("createdAt") = ${data}::date;
+                        WITH consumo_diario AS (
+                            SELECT
+                                fluxo::numeric * EXTRACT(EPOCH FROM LEAD("createdAt")
+                                OVER (PARTITION BY "dispositivoId" ORDER BY "createdAt") - "createdAt") / 60 AS consumo_litros,
+                                "createdAt"
+                            FROM public."Hidrometro"
+                            WHERE "dispositivoId" = ${selectedDeviceMac}
+                            AND "createdAt"::date = date(${data})
+                        )
+                        SELECT ROUND(SUM(consumo_litros), 2) AS consumo_diario_total
+                        FROM consumo_diario
                     `.then((rows) => rows[0]?.consumo_diario_total || 0)
         },
 }

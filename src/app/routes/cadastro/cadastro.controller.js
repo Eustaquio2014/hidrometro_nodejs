@@ -8,7 +8,6 @@ const { encryptPassword } = require('@src/app/utils/password-cipher.utils')
 const renderizar = catchAsync(async (req, res) => res.render('cadastro', { message: 'helloow' }))
 
 const cadastrar = catchAsync(async (req, res) => {
-    console.log('aaaaaaaa')
     const {
         nome, email, senha, sobrenome, nomeDispositivo, macDispositivo,
     } = req.body
@@ -32,14 +31,12 @@ const cadastrar = catchAsync(async (req, res) => {
             },
         },
     })
-        .then((result) => res.send(new ResponseDTO({ redirect: true, message: 'Sucesso! Sua conta foi criada.', data: UsuarioRawDTO(result) })))
+        .then((result) => res.send(new ResponseDTO({ redirect: true, message: 'Sucesso! Sua conta foi criada.', data: new UsuarioRawDTO(result) })))
         .catch((error) => {
             console.log('Erro de cadastro', error)
 
-            return res.send(new ResponseDTO({ message: `${capitalizeFirstLetter(error.meta?.target[0])} já cadastrado` }))
+            return res.send(new ResponseDTO({ message: `${capitalizeFirstLetter(error?.meta?.target[0])} já cadastrado` }))
         })
-    // error.meta.target[0] //email
-    // prismaError[error.code] //UniqueConstraintViolation
 })
 
 module.exports.cadastroController = {

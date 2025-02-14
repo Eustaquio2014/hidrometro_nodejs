@@ -28,22 +28,3 @@ module.exports.DadosController = {
         return HidrometroService.ConsumoDiario(data, selectedDeviceMac)
     },
 }
-
-// const gravarFluxo = async (message) => {
-//   try {
-//     const { espclient, fluxo, esplocal } = message;
-
-//     if (fluxo > 0) {
-//       return await knex('hidrometro_tbl')
-//         .insert({ espclient, local: esplocal, fluxo })
-//         .then((rows) => {
-//           console.log('fluxo() insert rows', rows);
-//           if (!rows) return false;
-
-//           return true;
-//         });
-//     }
-
-//     return false;
-//   } catch (error) {}
-// };

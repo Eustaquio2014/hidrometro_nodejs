@@ -13,8 +13,8 @@ model Privilegio {
   tipo      String   @default("Usuario")
   usuario   Usuario? @relation(fields: [idUsuario], references: [id])
   idUsuario Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(dbgenerated("NOW()"))
+  updatedAt DateTime @default(dbgenerated("NOW()")) @updatedAt
 
   @@unique([tipo, idUsuario])
 }
@@ -27,8 +27,8 @@ model Usuario {
   senha        String
   privilegios  Privilegio[]
   dispositivos Dispositivo[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime      @default(dbgenerated("NOW()"))
+  updatedAt    DateTime      @default(dbgenerated("NOW()")) @updatedAt
 }
 
 model Dispositivo {
@@ -41,8 +41,8 @@ model Dispositivo {
   SensorPresenca   SensorPresenca?
   usuario          Usuario?          @relation(fields: [idUsuario], references: [id])
   idUsuario        Int?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  createdAt        DateTime          @default(dbgenerated("NOW()"))
+  updatedAt        DateTime          @default(dbgenerated("NOW()")) @updatedAt
 }
 
 model Hidrometro {
@@ -51,8 +51,9 @@ model Hidrometro {
   deletado      Boolean      @default(false)
   dispositivo   Dispositivo? @relation(fields: [dispositivoId], references: [macId])
   dispositivoId String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt     DateTime     @default(dbgenerated("NOW()"))
+  updatedAt     DateTime     @default(dbgenerated("NOW()")) @updatedAt
+
 }
 
 model ValvulaSolenoide {
@@ -60,8 +61,8 @@ model ValvulaSolenoide {
   estado        Boolean     @default(false)
   dispositivo   Dispositivo @relation(fields: [dispositivoId], references: [macId])
   dispositivoId String      @unique
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime    @default(dbgenerated("NOW()"))
+  updatedAt     DateTime    @default(dbgenerated("NOW()")) @updatedAt
 }
 
 model SensorPresenca {
@@ -69,6 +70,6 @@ model SensorPresenca {
   estado        Boolean     @default(false)
   dispositivo   Dispositivo @relation(fields: [dispositivoId], references: [macId])
   dispositivoId String      @unique
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime    @default(dbgenerated("NOW()"))
+  updatedAt     DateTime    @default(dbgenerated("NOW()")) @updatedAt
 }

@@ -49,6 +49,14 @@ Caso deseje acompanhar o processo de build em tempo real, utilize:
 docker-compose -p hidromonitor-prd -f docker-compose.prd.yml up --env-file ./.env.production --build
 ```
 
+## Comandos de atualização de um deploy existente (Redeploy)
+
+Para realizar o deploy da aplicação no Docker, utilize o seguinte comando:
+
+```sh
+yarn docker:prd:redeploy
+```
+
 ## Requisitos
 
 - Docker instalado
@@ -61,5 +69,5 @@ docker-compose -p hidromonitor-prd -f docker-compose.prd.yml up --env-file ./.en
 - Para interromper o contêiner em execução, utilize:
 
 ```sh
-docker-compose -p hidromonitor-prd -f docker-compose.prd.yml down
+yarn docker:prd:down
 ```
