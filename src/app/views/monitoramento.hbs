@@ -302,7 +302,7 @@
 
     <!--CHARTJS REALTIME-->
     <script src='../plugins/charts/chart_raphael/raphael.2.1.0.min.js'></script>
-    <script src='../plugins/charts/chart_justgage/justgage.1.0.1.min.js'></script>
+    <script src='../plugins/charts/chart_justgage/justgage.1.2.2.min.js'></script>
 
 
     <!--APEX REALTIME-->
@@ -324,7 +324,14 @@
     <script>
 
         function refreshChartData(chart, content) {
-            chart.refresh(content || 0)
+            let maxValue = 100;
+
+            if (valoresDoDia > maxValue) {
+                while (maxValue <= valoresDoDia) {
+                    maxValue += 100;
+                }
+            }
+            chart.refresh(content || 0, maxValue)
         }
     </script>
 
@@ -439,7 +446,7 @@
             id: "consumo_id",
             value: litrosConsumidos,
             min: 0,
-            max: litrosConsumidos * 5,
+            max: 100,
             gaugeWidthScale: 0.8,
             counter: true,
             relativeGaugeSize: true,
