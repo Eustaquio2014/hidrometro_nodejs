@@ -1,5 +1,5 @@
 const { HidrometroService } = require('@src/app/services/hidrometro.service')
-const moment = require('moment-timezone')
+const moment = require('moment')
 
 module.exports.DadosController = {
     async renderPageDados(req, res) {
@@ -23,7 +23,7 @@ module.exports.DadosController = {
     },
 
     async ConsumoDiario(date, selectedDeviceMac) {
-        const data = date || moment.utc().format('YYYY-MM-DD').toDate()
+        const data = date || moment.utc().format('YYYY-MM-DD')
 
         return HidrometroService.ConsumoDiario(data, selectedDeviceMac)
     },

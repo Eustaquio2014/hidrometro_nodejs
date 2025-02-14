@@ -1,7 +1,7 @@
 const redisClient = require('@config/db/redis')
 const session = require('express-session')
 const RedisStore = require('connect-redis')(session)
-const moment = require('moment-timezone')
+const moment = require('moment')
 
 
 const SessionMaxAGE = 3600000
