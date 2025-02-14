@@ -122,9 +122,7 @@ router.post('/consumo-diario', async (req, res) => {
         selectedDeviceMac,
     )
 
-    return res.send({
-        dados: responseData,
-    })
+    return res.send(responseData)
 })
 
 module.exports = router
