@@ -309,19 +309,6 @@
 
 
 
-  <!--CHARTJS JS-->
-  <script src="/plugins/charts/chartjs/2.9.3/Chart.min.js"></script>
-  <script src="/plugins/charts/chartjs/utils.js"></script>
-
-
-  <!--CHARTJS REALTIME-->
-  <script src='/plugins/charts/chart_raphael/raphael.2.1.0.min.js'></script>
-  <script src='/plugins/charts/chart_justgage/justgage.1.0.1.min.js'></script>
-
-
-  <!--APEX REALTIME-->
-  <script src='/plugins/charts/chart_apex/apexcharts.js'></script>
-  <script src="/plugins/socket.io/2.3.0/socket.io.js"></script>
 
   <script>
     var localDispositivosData = {{{ json dispositivos }}}
@@ -329,25 +316,6 @@
     const firstDeviceId = localDispositivosData ? localDispositivosData[0].id : null
   </script>
 
-  <script>
-    //CONEXÃO SOCKET
-    var socket = io.connect();
-
-    var EspDATAgauge = { fluxo: "Carregando" };
-    var EspDATA = { fluxo: "0" };
-
-
-    //socket.emit('server message', "Me conectei : ");
-    //FROM SERVER
-    socket.on('server message', function (msg) {
-      //console.log("RECEBI: ", msg.fluxo)
-
-      EspDATA = msg;
-      EspDATAgauge = msg;
-
-    });
-
-  </script>
 
 
   <script>
