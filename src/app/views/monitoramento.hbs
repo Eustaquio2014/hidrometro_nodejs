@@ -326,8 +326,8 @@
         function refreshChartData(chart, content) {
             let maxValue = 100;
 
-            if (valoresDoDia > maxValue) {
-                while (maxValue <= valoresDoDia) {
+            if (content > maxValue) {
+                while (maxValue <= content) {
                     maxValue += 100;
                 }
             }
